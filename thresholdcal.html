@@ -1,0 +1,284 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <head>
+        <style>
+            #header {
+                background-color: black;
+                color: white;
+                text-align: center;
+                padding: 5px;
+            }
+
+            #input {
+                line-height: 30px;
+                background-color: #eeeeee;
+                width: 50%;
+                float: left;
+            }
+
+            #output {
+                line-height: 30px;
+                background-color: #eeeeee;
+                float: right;
+                width: 50%;
+            }
+
+            #footer {
+                background-color: #1e1e1e;
+                color: white;
+                clear: both;
+                text-align: center;
+                padding: 5px;
+            }
+
+            label {
+                width: 120px;
+                display: inline-block;
+                text-align: left;
+            }
+            .select {
+                background: #fafdfe;
+                height: 28px;
+                width: 180px;
+                line-height: 28px;
+                border: 1px solid #9bc0dd;
+                -moz-border-radius: 2px;
+                -webkit-border-radius: 2px;
+                border-radius: 2px;
+                font-size:large;
+            }
+        </style>
+    </head>
+
+<body>
+    <div id="header" style="text-align: left;">
+        <h2>
+            阈值计算器:<br />
+        </h2>
+        <h3>
+            target = (double) (((m * val) + (b * pow(10, k1))) * pow(10, k2));
+        </h3>
+    </div>
+    <div id="main">
+        <label style="font: bold 30px; font-size: x-large; width: 240;">Typical value</label>
+        <select class="select" onchange="return typicalSetChange(options[selectedIndex])">
+            <option value='"M"=0x80&"B"=0x0&"K1"=0x0&"K2"=0x0&"LNR"=0x00&"LCR"=0x05&"LNC"=0x08&"UNC"=0xff&"UCR"=0xff&"UNR"=0xff'>30000RPM</option>
+            <option value='"M"=0x64&"B"=0x0&"K1"=0x0&"K2"=0x0&"LNR"=0x00&"LCR"=0x05&"LNC"=0x08&"UNC"=0xff&"UCR"=0xff&"UNR"=0xff'>20000RPM</option>
+            <option value='"M"=0x9&"B"=0x0&"K1"=0x0&"K2"=0x0&"LNR"=0x00&"LCR"=0x05&"LNC"=0x08&"UNC"=0xff&"UCR"=0xff&"UNR"=0xff'>2000W</option>
+            <option value='"M"=0x4&"B"=0x0&"K1"=0x0&"K2"=0x0&"LNR"=0x00&"LCR"=0x05&"LNC"=0x08&"UNC"=0xff&"UCR"=0xff&"UNR"=0xff'>1200W</option>
+            <option value='"M"=0x36&"B"=0x0&"K1"=0x0&"K2"=0xd&"LNR"=0xc1&"LCR"=0xc7&"LNC"=0xce&"UNC"=0xed&"UCR"=0xf4&"UNR"=0xfa'>12V</option>
+            <option value='"M"=0x18&"B"=0x0&"K1"=0x0&"K2"=0xd&"LNR"=0xb4&"LCR"=0xbb&"LNC"=0xc1&"UNC"=0xde&"UCR"=0xe4&"UNR"=0xeb'>5V</option>
+            <option value='"M"=0xf&"B"=0x0&"K1"=0x0&"K2"=0xd&"LNR"=0xbf&"LCR"=0xc6&"LNC"=0xcc&"UNC"=0xeb&"UCR"=0xf2&"UNR"=0xf8'>3.3V</option>
+            <option value='"M"=0xe&"B"=0x0&"K1"=0x0&"K2"=0xd&"LNR"=0xba&"LCR"=0xc0&"LNC"=0xc7&"UNC"=0xe4&"UCR"=0xeb&"UNR"=0xf1'>3V</option>
+            <option value='"M"=0x9&"B"=0x0&"K1"=0x0&"K2"=0xd&"LNR"=0xae&"LCR"=0xb4&"LNC"=0xba&"UNC"=0xd6&"UCR"=0xdc&"UNR"=0xe1'>1.8V</option>
+            <option value='"M"=0x6&"B"=0x0&"K1"=0x0&"K2"=0xd&"LNR"=0xae&"LCR"=0xb4&"LNC"=0xba&"UNC"=0xd6&"UCR"=0xdc&"UNR"=0xe1'>1.2V</option>
+            <option value='"M"=0x5&"B"=0x0&"K1"=0x0&"K2"=0xd&"LNR"=0xae&"LCR"=0xb4&"LNC"=0xba&"UNC"=0xd6&"UCR"=0xdc&"UNR"=0xe1'>1.0V</option>
+            <option value='"M"=0x4&"B"=0x0&"K1"=0x0&"K2"=0xd&"LNR"=0xae&"LCR"=0xb4&"LNC"=0xba&"UNC"=0xd6&"UCR"=0xdc&"UNR"=0xe1'>0.8V</option>
+        </select>
+    </div>
+
+    <div id="main">
+        <div id="input">
+            <h2>
+                输入:<br />
+            </h2>
+            <table>
+                <div>
+                    <label>M: </label>
+                    <input type="text" id="M_VALUE" onfocus="return calThreshold()" onblur="return calThreshold()"
+                        value="1"><br />
+                </div>
+                <div>
+                    <label>B: </label>
+                    <input type="text" id="B_VALUE" onfocus="return calThreshold()" onblur="return calThreshold()"
+                        value="0x0" title="[7:0] -  B: LS 8 bits  [2's complement, signed, 10-bit 'B' value.]"><br />
+                </div>
+                <div>
+                    <label>B EXP: </label>
+                    <input type="text" id="K1_VALUE" onfocus="return calThreshold()" onblur="return calThreshold()"
+                        value="0x0" title="[7:4] -  [3:0] -  B exponent 4 bits, 2's complement, signed
+                        0到0xf, 十进制、16禁止都可以"><br />
+                </div>
+                <div>
+                    <label>R EXP: </label>
+                    <input type="text" id="K2_VALUE" onfocus="return calThreshold()" onblur="return calThreshold()"
+                        value="0xd" title="[7:4] -  R (result) exponent 4 bits, 2's complement, signed
+                        0到0xf, 十进制、16禁止都可以"><br />
+                </div>
+                <div>
+                    <label>LNR:原始数据 </label>
+                    <input type="text" id="LNR_RAW_VALUE" onfocus="return calThreshold()" onblur="return calThreshold()"
+                        value="0xf8"><br />
+                </div>
+                <div>
+                    <label>LCR:原始数据 </label>
+                    <input type="text" id="LCR_RAW_VALUE" onfocus="return calThreshold()" onblur="return calThreshold()"
+                        value="0xf2"><br />
+                </div>
+                <div>
+                    <label>LNC:原始数据 </label>
+                    <input type="text" id="LNC_RAW_VALUE" onfocus="return calThreshold()" onblur="return calThreshold()"
+                        value="0xeb"><br />
+                </div>
+                <div>
+                    <label>UNC:原始数据 </label>
+                    <input type="text" id="UNC_RAW_VALUE" onfocus="return calThreshold()" onblur="return calThreshold()"
+                        value="0xcc"><br />
+                </div>
+                <div>
+                    <label>UCR:原始数据 </label>
+                    <input type="text" id="UCR_RAW_VALUE" onfocus="return calThreshold()" onblur="return calThreshold()"
+                        value="0xc6"><br />
+                </div>
+                <div>
+                    <label>UNR:原始数据 </label>
+                    <input type="text" id="UNR_RAW_VALUE" onfocus="return calThreshold()" onblur="return calThreshold()"
+                        value="0xbf">
+                    <button type="submit" onclick="return calThreshold()">提交</button>
+                </div>
+            </table>
+
+        </div>
+        <div id="output">
+            <h2>
+                输出:<br />
+            </h2>
+            <table>
+                <div>
+                    <label>用于计算的M</label>
+                    <input type="text" id="M_TARGET_VALUE" disabled><br />
+                </div>
+                <div>
+                    <label>用于计算的B</label>
+                    <input type="text" id="B_TARGET_VALUE" disabled><br />
+                </div>
+                <div>
+                    <label>用于计算的K1</label>
+                    <input type="text" id="K1_TARGET_VALUE" disabled><br />
+                </div>
+                <div>
+                    <label>用于计算的K2</label>
+                    <input type="text" id="K2_TARGET_VALUE" disabled><br />
+                </div>
+                <div>
+                    <label>LNR:最终数据 </label>
+                    <input type="text" id="LNR_TARGET_VALUE" disabled><br />
+                </div>
+                <div>
+                    <label>LCR:最终数据 </label>
+                    <input type="text" id="LCR_TARGET_VALUE" disabled><br />
+                </div>
+                <div>
+                    <label>LNC:最终数据 </label>
+                    <input type="text" id="LNC_TARGET_VALUE" disabled><br />
+                </div>
+                <div>
+                    <label>UNC:最终数据 </label>
+                    <input type="text" id="UNC_TARGET_VALUE" disabled><br />
+                </div>
+                <div>
+                    <label>UCR:最终数据 </label>
+                    <input type="text" id="UCR_TARGET_VALUE" disabled><br />
+                </div>
+                <div>
+                    <label>UNR:最终数据 </label>
+                    <input type="text" id="UNR_TARGET_VALUE" disabled><br />
+                </div>
+            </table>
+        </div>
+    </div>
+    <div id=footer>
+        <h5>
+            author: zhangjian_linux@163.com
+            All Rights Reserved
+        </h5>
+    </div>
+    <script>
+        function tos32(val, bits) {
+            return ((val & ((1 << ((bits) - 1)))) ? (-((val) & (1 << ((bits) - 1))) | (val)) : (val));
+        };
+
+        function cal(m, b, k1, k2, val) {
+            return ((m * val) + (b * Math.pow(10, k1))) * Math.pow(10, k2);
+        }
+
+        function calThreshold() {
+            let M_VALUE = parseInt(document.getElementById("M_VALUE").value);
+            let B_VALUE = parseInt(document.getElementById("B_VALUE").value);
+            let K1_VALUE = parseInt(document.getElementById("K1_VALUE").value);
+            let K2_VALUE = parseInt(document.getElementById("K2_VALUE").value);
+            let LNR_RAW_VALUE = parseInt(document.getElementById("LNR_RAW_VALUE").value);
+            let LCR_RAW_VALUE = parseInt(document.getElementById("LCR_RAW_VALUE").value);
+            let LNC_RAW_VALUE = parseInt(document.getElementById("LNC_RAW_VALUE").value);
+            let UNC_RAW_VALUE = parseInt(document.getElementById("UNC_RAW_VALUE").value);
+            let UCR_RAW_VALUE = parseInt(document.getElementById("UCR_RAW_VALUE").value);
+            let UNR_RAW_VALUE = parseInt(document.getElementById("UNR_RAW_VALUE").value);
+
+            M_VALUE = tos32(M_VALUE, 10);
+            B_VALUE = tos32(B_VALUE, 14);
+            K1_VALUE = tos32(K1_VALUE, 4);
+            K2_VALUE = tos32(K2_VALUE, 4);
+
+            console.log(M_VALUE)
+            console.log(B_VALUE)
+            console.log(K1_VALUE)
+            console.log(K2_VALUE)
+            console.log(LNR_RAW_VALUE)
+            console.log(LCR_RAW_VALUE)
+            console.log(LNC_RAW_VALUE)
+            console.log(UNC_RAW_VALUE)
+            console.log(UCR_RAW_VALUE)
+            console.log(UNR_RAW_VALUE)
+            document.getElementById("B_TARGET_VALUE").value
+            document.getElementById("B_TARGET_VALUE").value = B_VALUE;
+            document.getElementById("M_TARGET_VALUE").value = M_VALUE;
+            document.getElementById("K1_TARGET_VALUE").value = K1_VALUE;
+            document.getElementById("K2_TARGET_VALUE").value = K2_VALUE;
+
+            document.getElementById("LNR_TARGET_VALUE").value = cal(M_VALUE, B_VALUE, K1_VALUE, K2_VALUE,
+                LNR_RAW_VALUE);
+            document.getElementById("LCR_TARGET_VALUE").value = cal(M_VALUE, B_VALUE, K1_VALUE, K2_VALUE,
+                LCR_RAW_VALUE);
+            document.getElementById("LNC_TARGET_VALUE").value = cal(M_VALUE, B_VALUE, K1_VALUE, K2_VALUE,
+                LNC_RAW_VALUE);
+            document.getElementById("UNC_TARGET_VALUE").value = cal(M_VALUE, B_VALUE, K1_VALUE, K2_VALUE,
+                UNC_RAW_VALUE);
+            document.getElementById("UCR_TARGET_VALUE").value = cal(M_VALUE, B_VALUE, K1_VALUE, K2_VALUE,
+                UCR_RAW_VALUE);
+            document.getElementById("UNR_TARGET_VALUE").value = cal(M_VALUE, B_VALUE, K1_VALUE, K2_VALUE,
+                UNR_RAW_VALUE);
+            return;
+        }
+        function typicalSetChange(obj) {
+            var respDesc=obj.value;
+            console.log(respDesc);
+            var newstr = respDesc.replace(/=/g,":\"");
+            console.log(newstr);
+            var stringObj= "{" +newstr.replace(/&/g,"\",") + "\"}";
+            console.log(stringObj);
+            var obj = JSON.parse(stringObj);
+
+            document.getElementById("M_VALUE").value    = obj.M;
+            document.getElementById("B_VALUE").value    = obj.B;
+            document.getElementById("K1_VALUE").value   = obj.K1;
+            document.getElementById("K2_VALUE").value   = obj.K2;
+            document.getElementById("LNR_RAW_VALUE").value  = obj.LNR;
+            document.getElementById("LCR_RAW_VALUE").value  = obj.LCR;
+            document.getElementById("LNC_RAW_VALUE").value  = obj.LNC;
+            document.getElementById("UNC_RAW_VALUE").value  = obj.UNC;
+            document.getElementById("UCR_RAW_VALUE").value  = obj.UCR;
+            document.getElementById("UNR_RAW_VALUE").value  = obj.UNR;
+            return calThreshold();
+        }
+    </script>
+</body>
+
+
+<script>
+
+</script>
+
+</html>
